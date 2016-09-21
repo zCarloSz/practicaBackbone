@@ -6,7 +6,7 @@ var ListadoM = Backbone.Model.extend({
 
 
 var ListadoC = Backbone.Collection.extend({
-  url: 'datos.json',
+  url: 'datos.php',
   model: ListadoM,
   dimeEstado: function(){
     var that = this;
@@ -55,10 +55,15 @@ var ListadoV = Backbone.View.extend({
   }
 });
 
+
 var vistaLista = false;
-var coleccionlista = new ListadoC( [{contenido:'PRIME'}] );
-coleccionlista.fetch({
-  success: function(){
-    vistaLista = new ListadoV();
-  }
+var coleccionlista = new ListadoC();
+
+$(document).ready(function(){
+  coleccionlista.fetch({
+    success: function(data){
+      console.log(data);
+      vistaLista = new ListadoV();
+    }
+  });
 });
