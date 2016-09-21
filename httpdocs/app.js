@@ -1,10 +1,20 @@
+// MODEL
 var ListadoM = Backbone.Model.extend({
   defaults: {
-    contenido: ''
+    contenido: '',
+    tipo: false
+  }
+});
+
+var ListadoM_select = Backbone.Model.extend({
+  defaults: {
+    id: false,
+    nombre: ''
   }
 });
 
 
+// COLLECTION
 var ListadoC = Backbone.Collection.extend({
   url: 'datos.php',
   model: ListadoM,
@@ -16,28 +26,39 @@ var ListadoC = Backbone.Collection.extend({
   }
 });
 
+var ListadoC_select = Backbone.Collection.extend({
+  url: 'datosSelect.php',
+  model: ListadoM_select
+});
 
+
+// VIEW
 var ListadoV = Backbone.View.extend({
   el: '#AP',
 
   //listaTpl: _.template('<div class="elemento"><%- contenido %></div>'),
   listaTpl: _.template($('#templateElementoLista').html()),
+  selectTpl: _.template($('#templateElementoSelect').html()),
 
   events: {
-    'click #enviar': 'incluir'
+    'click #enviar': 'incluir',
   },
 
   initialize: function(){
     var that = this;
+
     that.render();
   },
 
   incluir: function() {
     var that = this;
 
-    var cont =  $('#elemento').val();
-    $('#elemento').val('');
-    coleccionlista.add({contenido:cont});
+    var cont = $('#texto').val();
+    //var sele = $('#sel').value();
+
+    $('#texto').val('');
+    coleccionlista.add({contenido:cont/*, tipo:sele*/});
+
     console.log(coleccionlista.toJSON());
     coleccionlista.dimeEstado();
     that.render();
@@ -46,11 +67,17 @@ var ListadoV = Backbone.View.extend({
   render: function(){
     var that = this;
 
-    var ancla = $(that.$el).find('#renderDatos');
-    ancla.html('');
+    var ancla1 = $(that.$el).find('#renderDatos');
+    ancla1.html('');
     coleccionlista.each( function(e,i){
       //ancla.prepend( e.get('contenido') + '<br>' );
-      ancla.prepend( that.listaTpl( e.toJSON() ));
+      ancla1.prepend( that.listaTpl( e.toJSON() ));
+    });
+
+    var ancla2 = $(that.$el).find('#sel');
+    ancla2.html();
+    colleccionselect.each( function(e,i){
+      ancla2.append( that.selectTpl( e.toJSON() ));
     });
   }
 });
@@ -58,7 +85,19 @@ var ListadoV = Backbone.View.extend({
 
 var vistaLista = false;
 var coleccionlista = new ListadoC();
+var colleccionselect = new ListadoC_select();
 
+
+$(document).ready(function(){
+  $.when(
+    colleccionselect.fetch(), coleccionlista.fetch() //scheduleSubjects.fetch(), subjectList.fetch(), assignments.fetch()
+  ).done( function(scheduleSubjects, subjectList, assignments) {
+    vistaLista = new ListadoV();
+  });
+});
+
+
+/*
 $(document).ready(function(){
   coleccionlista.fetch({
     success: function(data){
@@ -67,3 +106,4 @@ $(document).ready(function(){
     }
   });
 });
+*/

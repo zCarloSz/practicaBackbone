@@ -7,13 +7,17 @@
   <body>
 
     <script type='text/template' id="templateElementoLista">
-      <div class="elemento"><%= contenido %></div>
+      <div class="elemento"><%= contenido %> <strong>es un</strong> <%= tipo %></div>
+    </script>
+
+    <script type="text/template" id="templateElementoSelect">
+        <option value="<%= id %>"><%= nombre %></option>
     </script>
 
     <div id="AP">
       <div id="formulario">
         <form action="">
-          <input type="text" id="elemento">
+          <input type="text" id="texto"><select id="sel"></select>
           <button type="button" id="enviar">Enviar</button>
         </form>
       </div>
