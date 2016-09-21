@@ -6,7 +6,7 @@ var ListadoM = Backbone.Model.extend({
 
 
 var ListadoC = Backbone.Collection.extend({
-  url: '/olamundo',
+  url: 'datos.json',
   model: ListadoM,
   dimeEstado: function(){
     var that = this;
@@ -20,7 +20,8 @@ var ListadoC = Backbone.Collection.extend({
 var ListadoV = Backbone.View.extend({
   el: '#AP',
 
-  listaTpl: _.template('<div class="elemento"><%- contenido %></div>'),
+  //listaTpl: _.template('<div class="elemento"><%- contenido %></div>'),
+  listaTpl: _.template($('#templateElementoLista').html()),
 
   events: {
     'click #enviar': 'incluir'
@@ -49,15 +50,15 @@ var ListadoV = Backbone.View.extend({
     ancla.html('');
     coleccionlista.each( function(e,i){
       //ancla.prepend( e.get('contenido') + '<br>' );
-      //ancla.prepend( that.listaTpl( e.toJSON() ) );
-      //ancla.prepend($())
+      ancla.prepend( that.listaTpl( e.toJSON() ));
     });
   }
 });
 
-
-
-
-
+var vistaLista = false;
 var coleccionlista = new ListadoC( [{contenido:'PRIME'}] );
-var vistaLista = new ListadoV();
+coleccionlista.fetch({
+  success: function(){
+    vistaLista = new ListadoV();
+  }
+});
