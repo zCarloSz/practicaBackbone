@@ -73,7 +73,7 @@ var ListadoV = Backbone.View.extend({
     ancla1.html('');
     coleccionlista.each( function(e,i){
       //ancla.prepend( e.get('contenido') + '<br>' );
-      console.log(colleccionselect.get( e.get('tipo') ).get('nombre'));
+      //console.log(colleccionselect.get( e.get('tipo') ).get('nombre'));
 
       var fila = {
         contenido: e.get('contenido'),
@@ -104,15 +104,3 @@ $(document).ready(function(){
     vistaLista = new ListadoV();
   });
 });
-
-
-/*
-$(document).ready(function(){
-  coleccionlista.fetch({
-    success: function(data){
-      console.log(data);
-      vistaLista = new ListadoV();
-    }
-  });
-});
-*/
