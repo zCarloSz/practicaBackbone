@@ -23,6 +23,10 @@ var ListadoC = Backbone.Collection.extend({
 
     console.log('Colección con ' + that.length + ' elementos.' );
     console.log( that.pluck('contenido') );
+  },
+  sincronizate: function() {
+    var that =  this;
+    Backbone.sync('create', that);
   }
 });
 
@@ -56,13 +60,16 @@ var ListadoV = Backbone.View.extend({
     var cont = $('#texto').val();
     //var sele = document.getElementById('sel').value;
     //var sele = $('#sel option:selected').val();
-    var sele = $('#sel option:selected').attr('value');
+    var sele = parseInt($('#sel option:selected').attr('value')); // Parseado para convertirlo en Int
 
     $('#texto').val('');
     coleccionlista.add( {contenido:cont, tipo:sele} );
 
     console.log(coleccionlista.toJSON());
     coleccionlista.dimeEstado();
+
+    coleccionlista.sincronizate();
+
     that.render();
   },
 
