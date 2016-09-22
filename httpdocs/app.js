@@ -54,10 +54,12 @@ var ListadoV = Backbone.View.extend({
     var that = this;
 
     var cont = $('#texto').val();
-    //var sele = $('#sel').value();
+    //var sele = document.getElementById('sel').value;
+    //var sele = $('#sel option:selected').val();
+    var sele = $('#sel option:selected').attr('value');
 
     $('#texto').val('');
-    coleccionlista.add({contenido:cont/*, tipo:sele*/});
+    coleccionlista.add( {contenido:cont, tipo:sele} );
 
     console.log(coleccionlista.toJSON());
     coleccionlista.dimeEstado();
@@ -71,11 +73,18 @@ var ListadoV = Backbone.View.extend({
     ancla1.html('');
     coleccionlista.each( function(e,i){
       //ancla.prepend( e.get('contenido') + '<br>' );
-      ancla1.prepend( that.listaTpl( e.toJSON() ));
+      console.log(colleccionselect.get( e.get('tipo') ).get('nombre'));
+
+      var fila = {
+        contenido: e.get('contenido'),
+        tipo: colleccionselect.get( e.get('tipo') ).get('nombre')
+      };
+
+      ancla1.prepend( that.listaTpl( fila ));
     });
 
     var ancla2 = $(that.$el).find('#sel');
-    ancla2.html();
+    ancla2.html('');
     colleccionselect.each( function(e,i){
       ancla2.append( that.selectTpl( e.toJSON() ));
     });
